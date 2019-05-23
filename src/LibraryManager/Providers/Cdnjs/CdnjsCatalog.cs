@@ -63,6 +63,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         DisplayText = group.DisplayName,
                         InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(group.DisplayName, group.Version, _provider.Id),
                         Description = group.Description,
+                        Version = group.Version
                     };
 
                     completions.Add(completion);
@@ -89,6 +90,7 @@ namespace Microsoft.Web.LibraryManager.Providers.Cdnjs
                         {
                             DisplayText = version,
                             InsertionText = LibraryIdToNameAndVersionConverter.Instance.GetLibraryId(name, version, _provider.Id),
+                            Version = version
                         };
 
                         completions.Add(completion);

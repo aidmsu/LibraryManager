@@ -20,5 +20,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         public int Length { get; }
 
         public int Start { get; }
+
+        public string Version => CompletionItem.Version;
     }
 }

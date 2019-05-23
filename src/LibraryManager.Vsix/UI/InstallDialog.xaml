@@ -20,7 +20,6 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
-        <converters:HintTextConverter x:Key="HintTextConverter"/>
     </Window.Resources>
     <Grid Margin="12 12 12 12">
         <Grid.ColumnDefinitions>
@@ -41,6 +40,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="76*" />
@@ -57,6 +57,12 @@
                    Grid.Column="0"
                    Target="{Binding ElementName=LibrarySearchBox}">
                 <AccessText Text="{x:Static resources:Text.Library}" />
+            </Label>
+            <Label Name="Version" 
+                   Grid.Row="2"
+                   Grid.Column="0"
+                   Target="{Binding ElementName=VersionSearchBox}">
+                <AccessText Text="{x:Static resources:Text.Version}" />
             </Label>
             <ComboBox x:Name="ProviderComboBox"
                       AutomationProperties.Name="{extensions:RemoveCharacter {x:Static resources:Text.Provider}, _}"
@@ -77,39 +83,21 @@
                     </Style>
                 </ComboBox.ItemContainerStyle>
             </ComboBox>
-            <DockPanel Grid.Row="1" 
-                       Grid.Column="1"
-                       KeyboardNavigation.TabNavigation="Local"
-                       Focusable="False"
-                       LastChildFill="True" 
-                       Margin="0 0 0 9">
-                <imaging:CrispImage Width="13" 
-                                    Height="13" 
-                                    Margin="6 0 0 0"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"
-                                    DockPanel.Dock="Right"
-                                    Focusable="True"
-                                    AutomationProperties.Name="{Binding Converter={StaticResource HintTextConverter}}"
-                                    DataContext="{Binding ElementName=ProviderComboBox, Path=SelectedItem}"
-                                    KeyboardNavigation.TabIndex="2">
-                    <imaging:CrispImage.Style>
-                        <Style TargetType="{x:Type imaging:CrispImage}">
-                            <Setter Property="Source" Value="../Resources/StatusInfoTip.png" />
-                        </Style>
-                    </imaging:CrispImage.Style>
-                    <imaging:CrispImage.ToolTip>
-                        <Label Content="{Binding Converter={StaticResource HintTextConverter}}"/>
-                    </imaging:CrispImage.ToolTip>
-                </imaging:CrispImage>
-                <controls:Library x:Name="LibrarySearchBox"
-                                  AutomationProperties.Name="{x:Static resources:Text.Library}"
-                                  DockPanel.Dock="Left"
-                                  SearchService="PerformSearch"
-                                  Text="{Binding Path=PackageId, Mode=OneWayToSource}"
-                                  KeyboardNavigation.TabNavigation="Local"
-                                  KeyboardNavigation.TabIndex="1"/>
-            </DockPanel>
+            <controls:Library Grid.Row="1"
+                              Grid.Column="1"
+                              Margin="0 0 0 9"
+                              x:Name="LibrarySearchBox"
+                              AutomationProperties.Name="{x:Static resources:Text.Library}"
+                              DockPanel.Dock="Left"
+                              SearchService="PerformSearch"
+                              Text="{Binding Path=PackageId, Mode=OneWayToSource}" />
+            <controls:Version Grid.Row="2" 
+                              Grid.Column="1"
+                              Margin="0 0 0 9"
+                              x:Name="VersionSearchBox"
+                              AutomationProperties.Name="{x:Static resources:Text.Version}"
+                              SearchService="PerformSearch"
+                              Text="{Binding Path=PackageId, Mode=OneWayToSource}"/>
         </Grid>
 
         <StackPanel Orientation="Vertical"

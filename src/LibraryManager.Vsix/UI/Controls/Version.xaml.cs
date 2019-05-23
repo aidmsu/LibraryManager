@@ -15,35 +15,35 @@ using Microsoft.Web.LibraryManager.Vsix.UI.Extensions;
 
 namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 {
-    public partial class Library : INotifyPropertyChanged
+    public partial class Version : INotifyPropertyChanged
     {
         public static readonly DependencyProperty CaretIndexProperty = DependencyProperty.Register(
-            nameof(CaretIndex), typeof(int), typeof(Library), new PropertyMetadata(default(int)));
+            nameof(CaretIndex), typeof(int), typeof(Version), new PropertyMetadata(default(int)));
 
         public static readonly DependencyProperty SearchServiceProperty = DependencyProperty.Register(
-            nameof(SearchService), typeof(Func<string, int, Task<CompletionSet>>), typeof(Library), new PropertyMetadata(default(Func<string, int, Task<CompletionSet>>)));
+            nameof(SearchService), typeof(Func<string, int, Task<CompletionSet>>), typeof(Version), new PropertyMetadata(default(Func<string, int, Task<CompletionSet>>)));
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            nameof(SelectedItem), typeof(CompletionEntry), typeof(Library), new PropertyMetadata(default(CompletionEntry)));
+            nameof(SelectedItem), typeof(CompletionEntry), typeof(Version), new PropertyMetadata(default(CompletionEntry)));
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            nameof(Text), typeof(string), typeof(Library), new PropertyMetadata(default(string)));
+            nameof(Text), typeof(string), typeof(Version), new PropertyMetadata(default(string)));
 
-        public Library()
+        public Version()
         {
             InitializeComponent();
 
-            this.Loaded += LibrarySearchBox_Loaded;
+            this.Loaded += VersionSearchBox_Loaded;
         }
 
         protected override AutomationPeer OnCreateAutomationPeer()
         {
-            return new LibraryAutomationPeer(this);
+            return new VersionAutomationPeer(this);
         }
 
-        private void LibrarySearchBox_Loaded(object sender, RoutedEventArgs e)
+        private void VersionSearchBox_Loaded(object sender, RoutedEventArgs e)
         {
-            Window window = Window.GetWindow(LibrarySearchBox);
+            Window window = Window.GetWindow(VersionSearchBox);
 
             // Simple hack to make the popup dock to the textbox, so that the popup will be repositioned whenever
             // the dialog is dragged or resized.
@@ -110,8 +110,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                 return;
             }
 
-            Text = completion.CompletionItem.DisplayText;
-            LibrarySearchBox.CaretIndex = Text.IndexOf(completion.CompletionItem.DisplayText, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
+            Text = completion.CompletionItem.Version;
+            //VersionSearchBox.CaretIndex = Text.IndexOf(completion.CompletionItem.Version, StringComparison.OrdinalIgnoreCase) + completion.CompletionItem.DisplayText.Length;
+            VersionSearchBox.CaretIndex = Text.IndexOf(completion.CompletionItem.Version, StringComparison.OrdinalIgnoreCase);
             Flyout.IsOpen = false;
             SelectedItem = null;
         }
@@ -132,7 +133,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     break;
                 case Key.Escape:
                     Flyout.IsOpen = false;
-                    LibrarySearchBox.ScrollToEnd();
+                    VersionSearchBox.ScrollToEnd();
                     e.Handled = true;
                     break;
                 case Key.Down:
@@ -150,7 +151,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         private void HandleListBoxKeyPress(object sender, KeyEventArgs e)
         {
-            int index = LibrarySearchBox.CaretIndex;
+            int index = VersionSearchBox.CaretIndex;
 
             switch (e.Key)
             {
@@ -164,14 +165,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     {
                         SelectedItem = CompletionEntries[0];
                         LostFocus -= OnLostFocus;
-                        LibrarySearchBox.Focus();
-                        LibrarySearchBox.CaretIndex = index;
+                        VersionSearchBox.Focus();
+                        VersionSearchBox.CaretIndex = index;
                         LostFocus += OnLostFocus;
                     }
                     break;
                 case Key.Escape:
                     Flyout.IsOpen = false;
-                    LibrarySearchBox.ScrollToEnd();
+                    VersionSearchBox.ScrollToEnd();
                     e.Handled = true;
                     break;
                 case Key.Down:
@@ -182,8 +183,8 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                     break;
                 default:
                     LostFocus -= OnLostFocus;
-                    LibrarySearchBox.Focus();
-                    LibrarySearchBox.CaretIndex = index;
+                    VersionSearchBox.Focus();
+                    VersionSearchBox.CaretIndex = index;
                     LostFocus += OnLostFocus;
                     break;
             }
@@ -192,7 +193,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
         private void CommitSelectionAndMoveFocus()
         {
             Commit(SelectedItem);
-            LibrarySearchBox.Focus();
+            VersionSearchBox.Focus();
         }
 
         private void OnItemCommitGesture(object sender, MouseButtonEventArgs e)
@@ -206,24 +207,24 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             if (SelectedItem != null && !Options.IsKeyboardFocusWithin)
             {
                 Commit(SelectedItem);
-                LibrarySearchBox.ScrollToEnd();
+                VersionSearchBox.ScrollToEnd();
             }
         }
 
         private void PositionCompletions(int index)
         {
-            Rect r = LibrarySearchBox.GetRectFromCharacterIndex(index);
+            Rect r = VersionSearchBox.GetRectFromCharacterIndex(index);
             Flyout.HorizontalOffset = r.Left - 7;
             Options.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             Flyout.Width = Options.DesiredSize.Width;
         }
 
-        private IEnumerable<CompletionItem> FilterOutUnmatchedItems(IEnumerable<CompletionItem> items, string versionSuffix)
-        {
-            return items.Where(x => x.DisplayText.Contains(versionSuffix));
-        }
+        //private IEnumerable<CompletionItem> FilterOutUnmatchedItems(IEnumerable<CompletionItem> items, string versionSuffix)
+        //{
+        //    return items.Where(x => x.DisplayText.Contains(versionSuffix));
+        //}
 
-        private void LibrarySearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void VersionSearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             OnPropertyChanged(nameof(IsTextEntryEmpty));
 
@@ -234,7 +235,7 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             {
                 VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
-                    CompletionSet completionSet = await SearchService?.Invoke(Text, LibrarySearchBox.CaretIndex);
+                    CompletionSet completionSet = await SearchService?.Invoke(Text, VersionSearchBox.CaretIndex);
 
                     if (completionSet.Equals(null) || !completionSet.Completions.Any())
                     {
@@ -242,12 +243,12 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
                         return;
                     }
 
-                    int atIndex = Text.IndexOf('@');
+                    //int atIndex = Text.IndexOf('@');
 
-                    if (atIndex >= 0)
-                    {
-                        completionSet.Completions = FilterOutUnmatchedItems(completionSet.Completions, Text.Substring(atIndex + 1));
-                    }
+                    //if (atIndex >= 0)
+                    //{
+                    //    completionSet.Completions = FilterOutUnmatchedItems(completionSet.Completions, Text.Substring(atIndex + 1));
+                    //}
 
                     CompletionEntries.Clear();
 
@@ -260,15 +261,15 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
                     if (CompletionEntries != null && CompletionEntries.Count > 0 && Options.SelectedIndex == -1)
                     {
-                        if (atIndex >= 0)
-                        {
-                            SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.DisplayText.StartsWith(Text.Substring(atIndex + 1), StringComparison.OrdinalIgnoreCase)) ?? CompletionEntries[0];
-                        }
-                        else
-                        {
-                            string lastSelected = SelectedItem?.CompletionItem.DisplayText;
-                            SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.DisplayText == lastSelected) ?? CompletionEntries[0];
-                        }
+                        //if (atIndex >= 0)
+                        //{
+                        //    SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.DisplayText.StartsWith(Text.Substring(atIndex + 1), StringComparison.OrdinalIgnoreCase)) ?? CompletionEntries[0];
+                        //}
+                        //else
+                        //{
+                            string lastSelected = SelectedItem?.CompletionItem.Version;
+                            SelectedItem = CompletionEntries.FirstOrDefault(x => x.CompletionItem.Version == lastSelected) ?? CompletionEntries[0];
+                       // }
 
                         Options.ScrollIntoView(SelectedItem);
 
@@ -278,9 +279,9 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
             }
         }
 
-        private void Library_LostFocus(object sender, RoutedEventArgs e)
+        private void Version_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (!Options.IsKeyboardFocusWithin && !LibrarySearchBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
+            if (!Options.IsKeyboardFocusWithin && !VersionSearchBox.IsKeyboardFocusWithin && !Flyout.IsKeyboardFocusWithin)
             {
                 Flyout.IsOpen = false;
             }
@@ -288,30 +289,30 @@ namespace Microsoft.Web.LibraryManager.Vsix.UI.Controls
 
         protected override void OnAccessKey(AccessKeyEventArgs e)
         {
-            LibrarySearchBox.Focus();
+            VersionSearchBox.Focus();
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape && Flyout.IsOpen)
             {
-                LibrarySearchBox.Focus();
+                VersionSearchBox.Focus();
             }
         }
 
-        private void LibrarySearchBox_GotKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
+        private void VersionSearchBox_GotKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            // If the library search box is empty, the watermark text will be visible. We'll make sure that narrator reads it.
-            if (string.IsNullOrEmpty(LibrarySearchBox.Text))
+            // If the version search box is empty, the watermark text will be visible. We'll make sure that narrator reads it.
+            if (string.IsNullOrEmpty(VersionSearchBox.Text))
             {
                 RemoveCharacterExtension removeCharacterExtension = new RemoveCharacterExtension(Microsoft.Web.LibraryManager.Vsix.Resources.Text.TypeToSearch, "<>");
                 string watermarkText = (string)removeCharacterExtension.ProvideValue(ServiceProvider.GlobalProvider);
 
-                LibrarySearchBox.SetValue(AutomationProperties.HelpTextProperty, watermarkText);
+                VersionSearchBox.SetValue(AutomationProperties.HelpTextProperty, watermarkText);
             }
             else
             {
-                LibrarySearchBox.ClearValue(AutomationProperties.HelpTextProperty);
+                VersionSearchBox.ClearValue(AutomationProperties.HelpTextProperty);
             }
 
             e.Handled = true;

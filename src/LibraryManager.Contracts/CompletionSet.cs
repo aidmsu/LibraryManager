@@ -113,6 +113,11 @@ namespace Microsoft.Web.LibraryManager.Contracts
         public string Description;
 
         /// <summary>
+        /// Library version
+        /// </summary>
+        public string Version;
+
+        /// <summary>
         /// Returns whether the two objects are equal.
         /// </summary>
         public override bool Equals(object obj)
@@ -132,7 +137,8 @@ namespace Microsoft.Web.LibraryManager.Contracts
         {
             return InsertionText == other.InsertionText
                 && DisplayText == other.DisplayText
-                && Description == other.Description;
+                && Description == other.Description
+                && Version == other.Version;
         }
 
         /// <summary>

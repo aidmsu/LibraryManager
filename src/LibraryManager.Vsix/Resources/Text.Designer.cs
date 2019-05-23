@@ -423,5 +423,14 @@ namespace Microsoft.Web.LibraryManager.Vsix.Resources {
                 return ResourceManager.GetString("UninstallLibrary", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Version:.
+        /// </summary>
+        public static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
+            }
+        }
     }
 }

@@ -73,6 +73,10 @@
     </Compile>
     <Compile Include="UI\Controls\TargetLocationAutomationPeer.cs" />
     <Compile Include="UI\Controls\ThemedWindow.cs" />
+    <Compile Include="UI\Controls\VersionAutomationPeer.cs" />
+    <Compile Include="UI\Controls\Version.xaml.cs">
+      <DependentUpon>Version.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Converters\BoldingConverter.cs" />
     <Compile Include="UI\Converters\NotConverter.cs" />
     <Compile Include="UI\Converters\PackageItemIconConverter.cs" />
@@ -117,7 +121,6 @@
       <DependentUpon>TargetLocation.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Converters\EnumToBoolConverter.cs" />
-    <Compile Include="UI\Converters\HintTextConverter.cs" />
     <Compile Include="Shared\ILibraryCommandService.cs" />
     <Compile Include="Shared\ITaskStatusCenterService.cs" />
     <Compile Include="Shared\TaskStatusCenterService.cs" />
@@ -279,9 +282,6 @@
     <Content Include="source.extension.ico">
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Content>
-    <Resource Include="Resources\StatusInfoTip.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <EmbeddedResource Include="Resources\Text.cs.resx" />
     <EmbeddedResource Include="Resources\Text.de.resx" />
     <EmbeddedResource Include="Resources\Text.es.resx" />
@@ -388,6 +388,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="UI\Controls\EditorTooltip.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Controls\Version.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
