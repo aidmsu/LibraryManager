@@ -200,19 +200,24 @@ namespace Microsoft.Web.LibraryManager.Providers.Unpkg
                     completionSet.Length = version.Length;
 
                     NpmPackageInfo npmPackageInfo = await NpmPackageInfoCache.GetPackageInfoAsync(name, CancellationToken.None);
-                    foreach (SemanticVersion semVersion in npmPackageInfo.Versions)
+                    IList<SemanticVersion> versions = npmPackageInfo.Versions;
+
+                    if (versions != null)
                     {
-                        string versionText = semVersion.ToString();
-                        CompletionItem completionItem = new CompletionItem
+                        foreach (SemanticVersion semVersion in versions)
                         {
-                            DisplayText = versionText,
-                            InsertionText = name + "@" + versionText
-                        };
+                            string versionText = semVersion.ToString();
+                            CompletionItem completionItem = new CompletionItem
+                            {
+                                DisplayText = versionText,
+                                InsertionText = name + "@" + versionText
+                            };
 
-                        completions.Add(completionItem);
+                            completions.Add(completionItem);
+                        }
+
+                        completionSet.CompletionType = CompletionSortOrder.Version;
                     }
-
-                    completionSet.CompletionType = CompletionSortOrder.Version;
                 }
 
                 completionSet.Completions = completions;
