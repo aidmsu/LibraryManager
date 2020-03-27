@@ -13,4 +13,4 @@ jobs:
   - job: Windows
     pool: VSEng-MicroBuild2019
     steps:
-      - template: azure-pipelines/build.yml
+      - template: build.yml
